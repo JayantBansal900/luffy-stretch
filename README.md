@@ -4,7 +4,7 @@ A real-time computer-vision toy inspired by rubber-band stretching: **pinch any 
 
 It runs entirely on your laptop's CPU using **Google MediaPipe** face and hand landmark models and **OpenCV**.
 
-![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.11%20|%203.12-3776AB?logo=python&logoColor=white)
 ![OpenCV](https://img.shields.io/badge/OpenCV-4-5C3EE8?logo=opencv&logoColor=white)
 ![MediaPipe](https://img.shields.io/badge/MediaPipe-Tasks_API-0097A7?logo=google&logoColor=white)
 
@@ -71,7 +71,7 @@ luffy-stretch/
 
 ## Run it locally
 
-**Prerequisites:** Python 3.11 and a webcam.
+**Prerequisites:** Python 3.11 or 3.12 and a webcam.
 
 ```bash
 git clone https://github.com/JayantBansal900/luffy-stretch.git
@@ -83,7 +83,7 @@ venv\Scripts\activate
 # macOS / Linux
 source venv/bin/activate
 
-pip install opencv-python mediapipe numpy
+pip install -r requirements.txt
 python main.py
 ```
 
