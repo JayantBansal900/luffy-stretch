@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install system libraries for OpenCV
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libgl1 libglib2.0-0
+      - run: pip install -r requirements.txt
+      - name: Compile all Python sources
+        run: python -m compileall -q main.py config.py detectors effects
+      - name: Smoke test (load models, run detection, draw effect)
+        run: |
+          python - <<'PY'
+          import numpy as np, cv2, mediapipe as mp
+          from mediapipe.tasks import python
+          from mediapipe.tasks.python import vision
+          from effects.bezier import draw_bezier_curve
+          from effects.face_warp import get_stretch_offset
+
+          face = vision.FaceLandmarker.create_from_options(vision.FaceLandmarkerOptions(
+              base_options=python.BaseOptions(model_asset_path="models/face_landmarker.task"), num_faces=1))
+          hand = vision.HandLandmarker.create_from_options(vision.HandLandmarkerOptions(
+              base_options=python.BaseOptions(model_asset_path="models/hand_landmarker.task"), num_hands=1))
+          frame = np.zeros((480, 640, 3), np.uint8)
+          image = mp.Image(image_format=mp.ImageFormat.SRGB, data=cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+          face.detect(image); hand.detect(image)
+          draw_bezier_curve(frame, 100, 100, 400, 300)
+          assert frame.any(), "rubber band was not drawn"
+          assert get_stretch_offset(0, 0, 100, 50) == (35, 17)
+          print("Smoke test passed")
+          PY

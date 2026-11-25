@@ -1,4 +1,5 @@
 # Luffy Stretch 🫲
+[![CI](https://github.com/JayantBansal900/luffy-stretch/actions/workflows/ci.yml/badge.svg)](https://github.com/JayantBansal900/luffy-stretch/actions/workflows/ci.yml)
 
 A real-time computer-vision toy inspired by rubber-band stretching: **pinch any point on your face with your thumb and index finger, pull, and a stretchy rubber "arm" follows your hand** through the webcam feed.
 
