@@ -22,8 +22,8 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-      - name: Install system libraries for OpenCV
-        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libgl1 libglib2.0-0
+      - name: Install system libraries for OpenCV and MediaPipe
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libgl1 libglib2.0-0 libegl1 libgles2
       - run: pip install -r requirements.txt
       - name: Compile all Python sources
         run: python -m compileall -q main.py config.py detectors effects
